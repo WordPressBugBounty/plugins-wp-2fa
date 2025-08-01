@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: 2FA, two-factor authentication, 2-factor authentication, WordPress authentication, google authenticator
 Requires at least: 5.5
 Tested up to: 6.8.2
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 Requires PHP: 7.4.0
 
 Get better WordPress login security; add two-factor authentication (2FA) for all your users with this easy-to-use plugin.
@@ -135,6 +135,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 2.9.1 (2025-08-01) =
+
+* **Plugin & functionality improvements**
+	 * Switched 2FA operations back to native (pre 2.9.0).
+	 * Added a setting to manually enable / disable the REST API endpoints.
+
+ * **Bug fixes**
+	 * Fixed: configured user's 2FA methods not showing in the My Account WooCommerce portal.	
+
 = 2.9.0 (2025-07-31) =
 
 * **New features**
@@ -176,11 +185,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
  * **Bug fixes**
 	 * Fixed a PHP Notice "Function _load_textdomain_just_in_time" which could constantly occur in certain site setups .
 	 * Translations: Fixed an edge case where Admin settings switch to Dutch once .po files are loaded, preventing the inheritance of actual site language.
-	*  Fixed a bug causing the WordPress logo to be hidden on the 2FA code page in the Premium edition of WP 2FA.
-	* Fixed a scenario where users could see the "Remove 2FA" button on their profile page even though 2FA was enforced and no grace period was allowed.
-	* Fixed a handful of user role Inheritance issues which were causing some 2FA policies to not be correctly enforced to certain roles.
+	 * Fixed a bug causing the WordPress logo to be hidden on the 2FA code page in the Premium edition of WP 2FA.
+	 * Fixed a scenario where users could see the "Remove 2FA" button on their profile page even though 2FA was enforced and no grace period was allowed.
+	 * Fixed a handful of user role Inheritance issues which were causing some 2FA policies to not be correctly enforced to certain roles.
 	 * Fixed an error which could occur when redirecting a user to a non-existent URL after configuring 2FA. 
-	 *  Fixed a variety of PHP warnings related to Yubico, the out of band 2FA method, and the Reports page.
+	 * Fixed a variety of PHP warnings related to Yubico, the out of band 2FA method, and the Reports page.
 	 * Fixed a bug which could prevent users with SMS via Clickatell to use a backup code via email to log in.
 	 * Fixed a bug which was causing the "grace period time left" shortcode to always show time in UTC format instead of site's timezone.
 	 * Fixed a bug in which users using Yubico as primary method were unable to configure the email backup method.
