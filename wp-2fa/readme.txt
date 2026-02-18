@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: 2FA, two-factor authentication, 2-factor authentication, WordPress authentication, Google Authenticator
 Requires at least: 5.5
-Tested up to: 6.9
-Stable tag: 3.1.0
+Tested up to: 6.9.1
+Stable tag: 3.1.1
 Requires PHP: 7.4.0
 
 Get better WordPress login security; add two-factor authentication (2FA) for all your users with this easy-to-use plugin.
@@ -106,6 +106,9 @@ No, the plugin does not send any data to us whatsoever. The only data we receive
 = What 2FA methods are available with the plugin? =
 The free edition of WP 2FA includes the following 2FA methods: Authenticator app 2FA and code over email. This allows you to use Google Authenticator OTP The premium edition adds YubiKey, one-click email link, SMS 2FA, and Authy push notifications. 
 
+= How can I integrate two-factor authentication (2FA) into my custom login process or AJAX-based form? =
+WP 2FA includes a REST API that allows developers to enable and verify 2FA during custom authentication flows, such as AJAX-based login forms, mobile apps, or headless WordPress websites. Refer to the [REST API in WP 2FA documentation](https://melapress.com/support/kb/wp-2fa-rest-api/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa) for more information.
+
 = How can I ensure I do not get locked out? =
 WP 2FA includes backup authentication methods so that if the primary authentication method fails, you and your users can still log in. The free version of the plugin includes backup codes, which can be configured during 2FA configuration or at any point after that from the profile page. The premium edition adds 2FA backup codes over email.
 
@@ -142,26 +145,23 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 3.1.0 (2025-12-17) =
+= 3.1.1 (2026-02-17) =
 
  * **New features**
-	 * [Passkeys support](https://melapress.com/support/kb/wp-2fa-set-up-passkeys/) - allow users to use Passkeys, a cryptographic and secure passwordless solution.
+	 * Added a deactivation form feedback, to optionally capture user feedback.
 
  * **Plugin & functionality improvements**
-	 * Removed some redundant text from the Free edition first-time setup wizard.
-	 * Added a number of KB links to the admin notification email that is sent when a user bypasses 2FA due to lack of frontend configuration options.
-	 * Simplified the user flow in the wizard by removing some redundant steps when only one 2FA method is available.
-	 * Added the new tag {wp_admin_email} to be used in the email templates. This one retrieves the site administration email address. 
-	 * Added the final steps of the wizard, to the white labeling module, making it possible to white label all the wizards' slides.
-	 * Removed the plugin usage survey notice from the plugin.
-	 * Strengthened the authentication flow validation and improved the database query sanitization to prevent potential security vulnerabilities. These enhancements ensure more robust protection of user accounts and data integrity.
-	 * The 2FA setup wizard now automatically opens when users are redirected to the custom frontend 2FA configuration page after login, eliminating the need to click "Configure 2FA" to start the 2FA configuration process.
-	 * Improved the 2FA code page logic so it properly hides the "Log in" button and "Remember this device" options when When a 2FA method becomes unavailable, for example, due to service outage.
+	 * Removed some redundant code (Clickatell SDK Premium-only files) from the Free edition of the plugin.
+	 * Refactored the Freemius SDK licensing components for better maintainability.
+	 * Added a user-email check as a precaution in the 2FA setup to ensure the 2FA email is sent to the email address on account.
+	 * Added the feedback survey notice to gater user insights and help us improve the plugin.
+	 * Added the hook "wp_2fa_should_redirect_unconfigured" that allows developers to control whether the plugin intercepts and blocks backend requests when a user is forced to set up 2FA but hasn't completed the configuration yet.
+
 
  * **Bug fixes**
-	 * Fixed: The [wp-2fa-setup-notice] shortcode now properly respects the configure_2fa_url set in the plugin settings.
-	 * Fixed: When using REST validation method, disabling the anti-brute force attack protection now works correctly.
-	 * Fixed: On WordPress multisite installations with WooCommerce active, users logging into a subsite's admin area are now correctly redirected to that subsite's admin dashboard after completing 2FA authentication.
-	 * Fixed: When using REST API validation method, users can now successfully authenticate through WordPress's interim login modal (session timeout re-login).
+	 * Fixed a user-reported error: PHP Fatal error: Uncaught TypeError: strpos(): Argument #1 ($haystack) which could occur in /extensions/trusted-devices/class-core.php:299
+	 * Fixed: default email address generation incorrectly stripping the first letter from domains starting with "w". Credits for reporting this go to [David Scott](https://github.com/dave-js).
+	 * Fixed an issue causing the 2FA bypass feature to malfunction if used with the [Free edition of Melapress Login Security](https://wordpress.org/plugins/melapress-login-security/).
+	 * Fixed an error that could appear when using WP Engine Single Sign-on feature with WP 2FA active.
 	
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-2fa-plugin-changelog/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=WP2FA&utm_content=plugin+repos+description) for more detailed information about what was new, improved and fixed in previous version updates of WP 2FA.
