@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: 2FA, two-factor authentication, 2-factor authentication, WordPress authentication, Google Authenticator
 Requires at least: 5.5
 Tested up to: 6.9.1
-Stable tag: 3.1.1
+Stable tag: 3.1.1.2
 Requires PHP: 7.4.0
 
 Get better WordPress login security; add two-factor authentication (2FA) for all your users with this easy-to-use plugin.
@@ -145,23 +145,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 3.1.1 (2026-02-17) =
+= 3.1.1.2 (2026-02-25) =
 
- * **New features**
-	 * Added a deactivation form feedback, to optionally capture user feedback.
-
- * **Plugin & functionality improvements**
-	 * Removed some redundant code (Clickatell SDK Premium-only files) from the Free edition of the plugin.
-	 * Refactored the Freemius SDK licensing components for better maintainability.
-	 * Added a user-email check as a precaution in the 2FA setup to ensure the 2FA email is sent to the email address on account.
-	 * Added the feedback survey notice to gater user insights and help us improve the plugin.
-	 * Added the hook "wp_2fa_should_redirect_unconfigured" that allows developers to control whether the plugin intercepts and blocks backend requests when a user is forced to set up 2FA but hasn't completed the configuration yet.
-
-
- * **Bug fixes**
-	 * Fixed a user-reported error: PHP Fatal error: Uncaught TypeError: strpos(): Argument #1 ($haystack) which could occur in /extensions/trusted-devices/class-core.php:299
-	 * Fixed: default email address generation incorrectly stripping the first letter from domains starting with "w". Credits for reporting this go to [David Scott](https://github.com/dave-js).
-	 * Fixed an issue causing the 2FA bypass feature to malfunction if used with the [Free edition of Melapress Login Security](https://wordpress.org/plugins/melapress-login-security/).
-	 * Fixed an error that could appear when using WP Engine Single Sign-on feature with WP 2FA active.
+ * **Improvements**
+	 * Added a check in the wizard for when a user is setting up 2FA over email, to restrict user to only use the email address on account if they are not allowed to use any other email address.
+	 * Improved the survey admin notice logic so that once acted upon, it does not reappear after plugin updates.
 	
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-2fa-plugin-changelog/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=WP2FA&utm_content=plugin+repos+description) for more detailed information about what was new, improved and fixed in previous version updates of WP 2FA.
