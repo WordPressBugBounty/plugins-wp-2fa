@@ -10,6 +10,8 @@
 
 namespace WP2FA;
 
+defined( 'ABSPATH' ) || exit;
+
 use WP2FA\Methods\TOTP;
 use WP2FA\Utils\White_Label;
 use WP2FA\Admin\Setup_Wizard;
@@ -1243,6 +1245,12 @@ if ( ! class_exists( '\WP2FA\WP2FA' ) ) {
 		 * @since 2.0.0
 		 */
 		public static function update_plugin_settings( $settings, $skip_option_save = false, $settings_name = WP_2FA_POLICY_SETTINGS_NAME ) {
+
+			// When saving policy settings, ensure at least one primary method is enabled.
+			if ( WP_2FA_POLICY_SETTINGS_NAME === $settings_name && \is_array( $settings ) ) {
+				$settings = self::ensure_primary_method_in_settings( $settings );
+			}
+
 			// update local copy of settings.
 			self::$plugin_settings[ $settings_name ] = $settings;
 
@@ -1256,6 +1264,56 @@ if ( ! class_exists( '\WP2FA\WP2FA' ) ) {
 				$settings_hash = Settings_Utils::create_settings_hash( self::get_policy_settings() );
 				Settings_Utils::update_option( WP_2FA_PREFIX . 'settings_hash', $settings_hash );
 			}
+		}
+
+		/**
+		 * Ensures that at least one primary 2FA method is enabled in the given settings array.
+		 *
+		 * If no primary method keys are found (or all are falsy), TOTP and Email are
+		 * added as defaults to prevent the plugin from operating without any usable method.
+		 *
+		 * @param array $settings The policy settings array to validate.
+		 *
+		 * @return array The settings array, potentially with default methods added.
+		 *
+		 * @since 4.0.0
+		 */
+		private static function ensure_primary_method_in_settings( array $settings ): array {
+			$providers = Settings::get_providers();
+
+			if ( empty( $providers ) ) {
+				// Providers not yet registered (very early call) — skip validation.
+				return $settings;
+			}
+
+			$has_primary_method = false;
+
+			foreach ( $providers as $class => $slug ) {
+				if ( ! \defined( "$class::POLICY_SETTINGS_NAME" ) ) {
+					continue;
+				}
+				// Skip secondary methods (e.g. Backup Codes).
+				if ( \method_exists( $class, 'is_secondary' ) && $class::is_secondary() ) {
+					continue;
+				}
+				// Skip passkeys — not primary 2FA methods.
+				if ( 'passkeys' === $slug ) {
+					continue;
+				}
+
+				$key = $class::POLICY_SETTINGS_NAME;
+				if ( ! empty( $settings[ $key ] ) ) {
+					$has_primary_method = true;
+					break;
+				}
+			}
+
+			if ( ! $has_primary_method ) {
+				$settings['enable_totp']  = 'enable_totp';
+				$settings['enable_email'] = 'enable_email';
+			}
+
+			return $settings;
 		}
 
 		/**
