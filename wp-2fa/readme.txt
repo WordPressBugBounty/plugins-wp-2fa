@@ -4,9 +4,9 @@ Plugin URI: https://melapress.com/wordpress-2fa/
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: 2FA, two-factor authentication, 2-factor authentication, WordPress authentication, Google Authenticator
-Requires at least: 5.5
-Tested up to: 7.0.2
-Stable tag: 4.1.0
+Requires at least: 5.7
+Tested up to: 7.1
+Stable tag: 4.2.0
 Requires PHP: 7.4.0
 
 Get better WordPress login security; add two-factor authentication (2FA) for all your users with this easy-to-use plugin.
@@ -18,11 +18,6 @@ Get better WordPress login security; add two-factor authentication (2FA) for all
 Add an extra layer of security to your WordPress website login and protect your users. Enable two-factor authentication (2FA), the best protection against password leaks, automated password guessing, and brute force attacks.
 
 Use the WP 2FA plugin to enable two-factor authentication for your WordPress administrator, enforce 2FA for all your website users, or for users with specific roles. This plugin is very easy to use; everything can be configured via wizards with clear instructions, so even non-technical users can set up 2FA without requiring technical assistance.
-
-[youtube https://www.youtube.com/watch?v=vRlX_NNGeFo]
-
-[Features](https://melapress.com/wordpress-2fa/features/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa) | [Getting Started](https://melapress.com/support/kb/wp-2fa-plugin-getting-started/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa) | [Get the Premium!](https://melapress.com/wordpress-2fa/pricing/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa)
-
 
 ### 🔒 WP 2FA key plugin features and capabilities
 - **Passkeys support** for passwordless logins   
@@ -37,6 +32,10 @@ Use the WP 2FA plugin to enable two-factor authentication for your WordPress adm
 - **Dashboard-free setup** – users can configure 2FA without WP admin access  
 - **Editable email templates** for full customization  
 - **Much more!**
+
+[youtube https://www.youtube.com/watch?v=EbqiphCcwWs]
+
+[Features](https://melapress.com/wordpress-2fa/features/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa) | [Getting Started](https://melapress.com/support/kb/wp-2fa-plugin-getting-started/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa) | [Get the Premium!](https://melapress.com/wordpress-2fa/pricing/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wp2fa)
  
 ### 💎 Upgrade to WP 2FA Premium and get even more benefits
 
@@ -148,33 +147,69 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.1.0 (2026-07-21) =
+= 4.2.0 (2026-10-05) =
 
-* **New functionality**
+ * **New features & functionality**
 
-	 * Added an option to customize the OTP code validity period for zero-setup 2FA.
+	 *  Added automatic migration of users’ 2FA configurations from Wordfence Login Security. Users are migrated when they log in, while administrators can track migration progress and see when all users have been migrated.
+	 *  Added smart tags to the email and SMS template editors under White labeling.
+	 *  Added support for the new self-hosted licensing system while maintaining support for existing Freemius licences.
+	 *  Added WordPress.org Live Preview support for the free edition through WordPress Playground.
+	 *  Added a temporary 15 minutes user lockout after 5 failed 2FA verification attempts.
 
-* **Functionality & plugin improvements**
+ * **Security fixes**
 
-	 * Improved email delivery guidance and test email error messages, with clearer troubleshooting information and links to the email deliverability documentation.
-	 * Improved the front-end 2FA settings validation message and styling when the page slug has not been configured.
-	 * Authy OneTouch approval requests are now validated entirely server-side. Approval identifiers are single-use and are no longer exposed to the browser.
-	 * Moved the user profile backup-method link customization to the relevant user profile section of the white labeling settings.
-	 * Improved the login error shown when an unexpected issue prevents 2FA verification.
-	 * Improved spacing between the **Add Passkey** button and the passkeys table when the backup methods information link is displayed.
+	 *  Fixed a CSRF vulnerability affecting REST request handling. Thanks to Filip Kowalski for responsibly reporting this issue through Patchstack.
+	 *  Fixed a customer-reported multisite issue where an unresolved user role could remove the user's configured 2FA method across the network and stop 2FA prompts.
 
-* **Bug fixes**
+ * **Functionality & plugin improvements**
 
-	 * Fixed the **Customize email templates** heading on the white labeling page.
-	 * Fixed Twilio SMS delivery failures after upgrading to version 4.0, which could prevent users from receiving login or setup codes even when their Twilio credentials verified successfully.
-	 * Fixed missing **Edit Page** and **View Page** buttons in the Premium edition’s front-end settings page.
-	 * Fixed the **Bypass 2FA when logging in with passkeys** setting being disabled when switching between REST and native passkey modes.
-	 * Fixed the new-interface announcement modal repeatedly appearing because the selected option could not be saved.
-	 * Fixed passkey registration failing after closing and reopening the **Add a Passkey** modal in the same browser tab.
-	 * Fixed the **Remember this device** checkbox being unresponsive on WooCommerce login forms in the Premium edition until a failed verification attempt occurred.
+	 *  Raised the minimum required WordPress version from **5.5 to 5.7** to match the functions used by the plugin.
+	 *  Improved settings import validation to reject invalid 2FA configuration data.
+	 *  Settings imports now keep the “Limit access to the plugin settings” restriction in effect.
+	 *  Aligned multisite settings export permissions with import permissions, requiring network administrator access.
+	 *  Aligned permissions for removing 2FA and unlocking users on multisite with WordPress user-editing permissions.
+	 *  Improved the “Limit access to the plugin settings” option so it consistently restricts other administrators in both interfaces.
+	 *  Improved validation and CSS output handling for custom login page colors and logo URLs.
+	 *  Passkey sign-in REST routes now register their declared arguments correctly, allowing WordPress to apply the intended validation.
+	 *  Authy OneTouch logins now respect the `wp_2fa_rememberme` filter, matching the standard login flow.
+	 *  Default email templates now use `{wp_admin_email}` for the administrator contact address instead of the plugin's sender address, without replacing customized templates.
+	 *  Authy settings are now hidden on installations where Authy has not already been configured.
+	 *  Expanded white-label customization to cover the panel showing a user's currently configured 2FA method on their profile.
+	 *  Added information under White labeling about changing the 2FA login page URL with Melapress Login Security.
+	 *  Updated setup wizard button sizes to make the Continue action more prominent.
+	 *  Clarified the setup wizard text for grace periods, account blocking, and configuration reminders.
+	 *  Updated the 2FA reconfiguration dialog to match the new interface.
+	 *  Improved translation support by using complete sentences and proper plural forms.
+	 *  Added Dutch translation files.
+	 *  Admin notices from other Melapress plugins can now appear on WP 2FA pages.
 
-* **Security fix**
+ * **Bug fixes**
 
-* Fixed a passkeys bypass issue in the classic login flow reported by Jakub Herman.
-	
+	 *  Fixed settings imports leaving settings created after an export unchanged instead of restoring the exported configuration.
+	 *  Corrected the status labels shown for created, updated, and unchanged settings after an import.
+	 *  Corrected integer and boolean validation, including handling of valid `0` and `false` values, and addressed PHP 7.4 compatibility in the validator.
+	 *  Fixed test emails leaving supported subject tags and the `{backup_codes}` placeholder unreplaced. Backup-code previews use sample codes rather than real recovery codes.
+	 *  Fixed a PHP undefined-variable warning when an invalid Yubico token causes a parsing error.
+	 *  Fixed white-label placeholder replacement altering custom CSS rules and generating `Array to string conversion` warnings.
+	 *  Fixed the default “User account unlocked” email missing the site name and closing text, and corrected its HTML formatting.
+	 *  Fixed failed email and SMS sends being recorded as successful, which could prevent users from retrying.
+	 *  Fixed Twilio connection errors, server errors, and invalid responses being treated as successful SMS sends.
+	 *  Fixed repeated loading of the email 2FA screen sending excessive code emails and repeatedly invalidating earlier codes.
+	 *  Fixed plugin deletion failing or remaining stuck when `DISABLE_2FA_LOGIN` is enabled.
+	 *  Removed redundant Go back and Continue buttons from the method selection screen after upgrading existing installations.
+	 *  Fixed the report generation progress screen showing an incorrect total user count.
+	 *  Fixed reports classifying users as “Configured (but not required)” when 2FA is required for all users and the excluded-users list is empty.
+	 *  Fixed PHP warnings from `openssl_decrypt()` when malformed codes reach the out-of-band login handler.
+	 *  Fixed missing grace period information in login notices for users signing in with passkeys.
+	 *  Fixed REST-based 2FA logins ignoring the WordPress “Remember Me” selection.
+	 *  Fixed the malformed URL for the passkey profile script that caused a 404 error on the WooCommerce My Account 2FA page.
+	 *  Fixed interrupted user policy updates being marked as complete, preventing later attempts to refresh the user's policy state.
+	 *  Restored one-time code tag replacement in email subject lines.
+	 *  Fixed zero-setup email 2FA being assigned to and required for users whose roles are excluded from 2FA.
+	 *  Fixed passkey configuration buttons not following the setting that enables or disables WP 2FA styling.
+	 *  Stopped loading passkey assets on the WooCommerce My Account 2FA page when passkeys are disabled by the applicable policy.
+	 *  Fixed fatal errors during QR code generation when the PHP `iconv` extension is unavailable.
+	 *  Fixed missing PHP `xmlwriter` support causing fatal errors on the Profile and Edit User pages.
+
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-2fa-plugin-changelog/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=WP2FA&utm_content=plugin+repos+description) for more detailed information about what was new, improved and fixed in previous version updates of WP 2FA.
